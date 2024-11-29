@@ -1,5 +1,3 @@
-# __package__ = 'pdf_editor.pdfmerge'
-
 import os
 
 from PyPDF2 import PdfWriter
