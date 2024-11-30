@@ -33,8 +33,6 @@ def main():
     if args.input_file is None:
         raise ValueError("Input file not provided.")
 
-    # compress_pdf(args.input_file, args.output_file, "default")
-    # compress_pdf("2273141s_soryuusi5.pdf", "compressed.pdf", "screen")
     compress_pdf(args.input_file, args.output_file, args.quality)
 
 
