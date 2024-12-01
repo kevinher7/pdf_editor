@@ -1,7 +1,6 @@
 import subprocess
 import argparse
 
-from ..utils import ensure_pdf_extension
 from ..utils import get_pdf_path_from_name
 
 def compress_pdf(input_file, output_file=None, quality="screen"):
@@ -16,7 +15,7 @@ def compress_pdf(input_file, output_file=None, quality="screen"):
                      f"-dPDFSETTINGS=/{quality}", "-dNOPAUSE", "-dQUIET", "-dBATCH",
                      f"-sOutputFile={output_path}", input_path], shell=True)
     
-    print(f"Sucessfully compressed File into {output_file}")
+    print(f"Sucessfully compressed File into {output_path}")
 
 def main():
     parser = argparse.ArgumentParser(description="Compress PDF file")
@@ -30,6 +29,8 @@ def main():
         raise ValueError("Input file not provided.")
 
     compress_pdf(args.input_file, args.output_file, args.quality)
+
+    return 0
 
 
 if __name__ == "__main__":
