@@ -1,22 +1,16 @@
-import os
 import subprocess
 import argparse
 
 from ..utils import ensure_pdf_extension
+from ..utils import get_pdf_path_from_name
 
 def compress_pdf(input_file, output_file=None, quality="screen"):
-    input_file = ensure_pdf_extension(input_file)
+    input_path = get_pdf_path_from_name(input_file)
 
     if output_file is None:
-        output_file = input_file.replace(".pdf", "_c.pdf")
+        output_path = input_path.replace(".pdf", "_c.pdf")
     else:
-        output_file = ensure_pdf_extension(output_file)
-
-    
-    current_path = os.getcwd()
-
-    input_path = os.path.join(current_path, input_file)
-    output_path = os.path.join(current_path, output_file)
+        output_path = get_pdf_path_from_name(output_file)
 
     subprocess.call(["gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
                      f"-dPDFSETTINGS=/{quality}", "-dNOPAUSE", "-dQUIET", "-dBATCH",
