@@ -22,20 +22,23 @@ def remove_page(file_name, page_number_to_remove):
 
     return 0
 
+
 def main():
     parser = argparse.ArgumentParser(description="Remove Page from PDF file")
-    parser.add_argument("input_file", type=str, help="Name of input file (file to compress)")
-    parser.add_argument("page_to_remove", type=int, help="Page to Remove from the PDF")
+    parser.add_argument("input_file", type=str,
+                        help="Name of input file (file to compress)")
+    parser.add_argument("page_to_remove", type=int,
+                        help="Page to Remove from the PDF")
     args = parser.parse_args()
-
 
     if args.input_file is None:
         raise ValueError("Input file not provided.")
-    
+
     if args.page_to_remove is None:
         raise ValueError("Page to remove not provided.")
-    
+
     remove_page(args.input_file, args.page_to_remove)
+
 
 if __name__ == "__main__":
     main()
