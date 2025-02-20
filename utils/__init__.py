@@ -1,3 +1,4 @@
+from .cli import parse_pages_list
 from .cli import parse_pages_range
 
 from .files import get_pdfs_in_path
