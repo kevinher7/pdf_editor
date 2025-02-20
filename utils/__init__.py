@@ -6,3 +6,4 @@ from .files import ensure_pdf_extension
 from .files import get_pdf_path_from_name
 
 from .pdf import get_pdf_pages
+from .pdf import handle_pages_range
