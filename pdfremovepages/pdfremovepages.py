@@ -2,6 +2,8 @@ import argparse
 
 from PyPDF2 import PdfWriter
 
+from ..pdfkeeppages import keep_pages
+
 from ..utils import get_pdf_pages
 from ..utils import parse_pages_list
 
@@ -57,6 +59,8 @@ def main():
                         help="Name of input file (file to compress)")
     parser.add_argument("pages_to_remove", type=str,
                         help="Page to Remove from the PDF")
+    parser.add_argument("-k", "--keep", action="store_true",
+                        help="Keep specified pages instead of removing them")
     args = parser.parse_args()
 
     if args.input_file is None:
@@ -64,6 +68,10 @@ def main():
 
     if args.pages_to_remove is None:
         raise ValueError("Page to remove not provided.")
+
+    if (args.keep):
+        keep_pages(args.input_file, args.pages_to_remove)  # remove === keep
+        return
 
     remove_pages(args.input_file, args.pages_to_remove)
 
