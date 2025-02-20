@@ -1,6 +1,6 @@
 import argparse
 
-from PyPDF2 import PdfWriter, PdfReader
+from PyPDF2 import PdfWriter
 
 from ..utils import get_pdf_pages
 

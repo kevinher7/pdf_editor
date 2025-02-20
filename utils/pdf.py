@@ -1,6 +1,7 @@
-from PyPDF2 import PdfWriter, PdfReader
+from PyPDF2 import PdfReader
 
 from .files import get_pdf_path_from_name
+
 
 def get_pdf_pages(file_name):
     file_path = get_pdf_path_from_name(file_name)

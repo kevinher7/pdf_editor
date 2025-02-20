@@ -3,6 +3,7 @@ import argparse
 
 from ..utils import get_pdf_path_from_name
 
+
 def compress_pdf(input_file, output_file=None, quality="screen"):
     input_path = get_pdf_path_from_name(input_file)
 
@@ -14,16 +15,19 @@ def compress_pdf(input_file, output_file=None, quality="screen"):
     subprocess.call(["gswin64c", "-sDEVICE=pdfwrite", "-dCompatibilityLevel=1.4",
                      f"-dPDFSETTINGS=/{quality}", "-dNOPAUSE", "-dQUIET", "-dBATCH",
                      f"-sOutputFile={output_path}", input_path], shell=True)
-    
+
     print(f"Sucessfully compressed File into {output_path}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Compress PDF file")
-    parser.add_argument("input_file", type=str, help="Name of input file (file to compress)")
-    parser.add_argument("-o","--output_file", type=str, help="Name of output (compressed) file")
-    parser.add_argument("-q","--quality", type=str, help="Quality of compressed file", default="screen")
+    parser.add_argument("input_file", type=str,
+                        help="Name of input file (file to compress)")
+    parser.add_argument("-o", "--output_file", type=str,
+                        help="Name of output (compressed) file")
+    parser.add_argument("-q", "--quality", type=str,
+                        help="Quality of compressed file", default="screen")
     args = parser.parse_args()
-
 
     if args.input_file is None:
         raise ValueError("Input file not provided.")
