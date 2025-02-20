@@ -9,11 +9,12 @@ from ..utils import parse_pages_list
 
 
 def remove_page(file_name: str, page_number_to_remove: int):
-    merger = PdfWriter()
 
     pdf_pages = list(get_pdf_pages(file_name))
 
     pdf_pages.pop(page_number_to_remove - 1)
+
+    merger = PdfWriter()
 
     for page in pdf_pages:
         merger.add_page(page)
