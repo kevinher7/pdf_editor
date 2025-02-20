@@ -2,10 +2,13 @@ import argparse
 
 from PyPDF2 import PdfWriter
 
+
 from ..keep_pages import keep_pages
 
 from ..utils import get_pdf_pages
+from ..utils import handle_pages_range
 from ..utils import parse_pages_list
+from ..utils import parse_pages_range
 
 
 def remove_page(file_name: str, page_number_to_remove: int):
@@ -27,11 +30,14 @@ def remove_page(file_name: str, page_number_to_remove: int):
 
 
 def remove_pages(file_name: str, pages_to_remove: str):
-    pages_to_remove = parse_pages_list(pages_to_remove)
+    if "," in pages_to_remove:
+        pages_to_remove = parse_pages_list(pages_to_remove)
+    elif "-" in pages_to_remove:
+        pages_to_remove = parse_pages_range(pages_to_remove)
 
     if not pages_to_remove:
         raise ValueError(
-            "No pages to remove on input. Please insert pages to remove. Ex: 1, 2, 4, 7")
+            "No pages to remove on input. Please insert pages to remove. Ex: 1,2,4,7 or 1-5 (equivalent to 1,2,3,4,5)")
 
     if len(pages_to_remove) == 1:
         # remove_page accepts page in 1-based format
@@ -40,6 +46,8 @@ def remove_pages(file_name: str, pages_to_remove: str):
 
     pdf_pages = list(get_pdf_pages(file_name))
 
+    pages_to_remove = handle_pages_range(pages_to_remove, len(pdf_pages))
+
     merger = PdfWriter()
 
     for idx, page in enumerate(pdf_pages):
@@ -47,7 +55,8 @@ def remove_pages(file_name: str, pages_to_remove: str):
             continue
         merger.add_page(page)
 
-    merger.write(f"./{file_name}_r{pages_to_remove}.pdf")
+    merger.write(
+        f"./{file_name}_r{[page + 1 for page in pages_to_remove]}.pdf")
     merger.close()
 
     print(
