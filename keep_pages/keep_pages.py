@@ -21,7 +21,7 @@ def keep_pages(file_name, pages_range):
         merger.add_page(pdf_pages[page_number])
 
     merger.write(
-        f"./{file_name}_k{pages_range[0] + 1}-{pages_range[1] + 1}.pdf")
+        f"./{file_name}_k_{pages_range[0] + 1}-{pages_range[1] + 1}.pdf")
     merger.close()
 
     print(
