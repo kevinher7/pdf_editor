@@ -2,7 +2,7 @@ import argparse
 
 from PyPDF2 import PdfWriter
 
-from ..pdfkeeppages import keep_pages
+from ..keep_pages import keep_pages
 
 from ..utils import get_pdf_pages
 from ..utils import parse_pages_list
