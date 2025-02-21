@@ -17,3 +17,7 @@ def handle_pages_range(pages_range: list, total_number_of_pages: int) -> list[in
         pages_range[1] = total_number_of_pages
 
     return range(pages_range[0], pages_range[1] + 1, 1)
+
+
+def format_page_range(expanded_pages_range: list[int]) -> list[int, int]:
+    return [expanded_pages_range[0] + 1, expanded_pages_range[-1] + 1]

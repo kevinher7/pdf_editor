@@ -7,3 +7,4 @@ from .files import get_pdf_path_from_name
 
 from .pdf import get_pdf_pages
 from .pdf import handle_pages_range
+from .pdf import format_page_range
