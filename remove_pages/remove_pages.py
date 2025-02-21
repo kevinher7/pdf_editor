@@ -5,6 +5,7 @@ from PyPDF2 import PdfWriter
 
 from ..keep_pages import keep_pages
 
+from ..utils import format_page_range
 from ..utils import get_pdf_pages
 from ..utils import handle_pages_range
 from ..utils import parse_pages_list
@@ -30,10 +31,13 @@ def remove_page(file_name: str, page_number_to_remove: int):
 
 
 def remove_pages(file_name: str, pages_to_remove: str):
-    if "," in pages_to_remove:
-        pages_to_remove = parse_pages_list(pages_to_remove)
-    elif "-" in pages_to_remove:
+    is_range = False
+
+    if "-" in pages_to_remove:
         pages_to_remove = parse_pages_range(pages_to_remove)
+        is_range = True
+    else:  # a single number or list. 例: 1 or 1,2,3
+        pages_to_remove = parse_pages_list(pages_to_remove)
 
     if not pages_to_remove:
         raise ValueError(
@@ -41,26 +45,34 @@ def remove_pages(file_name: str, pages_to_remove: str):
 
     if len(pages_to_remove) == 1:
         # remove_page accepts page in 1-based format
-        remove_page(file_name, pages_to_remove[0] + 1)
+        remove_page(file_name, int(pages_to_remove[0]) + 1)
         return
 
     pdf_pages = list(get_pdf_pages(file_name))
 
-    pages_to_remove = handle_pages_range(pages_to_remove, len(pdf_pages))
+    if is_range:
+        pages_to_remove = handle_pages_range(pages_to_remove, len(pdf_pages))
 
     merger = PdfWriter()
+    last_page_to_remove = max(pages_to_remove)
 
     for idx, page in enumerate(pdf_pages):
         if idx in pages_to_remove:
             continue
         merger.add_page(page)
 
+    deleted_pages_string = ""
+    if is_range:
+        deleted_pages_string = format_page_range(pages_to_remove)
+    else:
+        deleted_pages_string = f"_{[page + 1 for page in pages_to_remove]}"
+
     merger.write(
-        f"./{file_name}_r{[page + 1 for page in pages_to_remove]}.pdf")
+        f"./{file_name}_r{deleted_pages_string}.pdf")
     merger.close()
 
     print(
-        f"Removed pages {[page + 1 for page in pages_to_remove]} from {file_name}.pdf")
+        f"Removed pages {deleted_pages_string} from {file_name}.pdf")
 
 
 def main():
