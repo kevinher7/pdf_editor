@@ -58,3 +58,34 @@ def parse_pages_list(pages_list: str) -> list[int]:
         parsed_pages_list.append(int(page) - 1)  # Make indeces 0-based
 
     return parsed_pages_list
+
+
+def parse_pages_to_list(pages: str) -> list[int]:
+    if "-" in pages:
+        pages = parse_pages_range(pages)
+        is_range = True
+    else:  # a single number or list. 例: 1 or 1,2,3
+        pages = parse_pages_list(pages)
+
+    return pages
+
+
+def handle_pages_range(pages_range: list, total_number_of_pages: int) -> list[int]:
+    if pages_range[1] == "end":
+        pages_range[1] = total_number_of_pages
+
+    return range(pages_range[0], pages_range[1] + 1, 1)
+
+
+def format_page_range(expanded_pages_range: list[int]) -> list[int, int]:
+    return [expanded_pages_range[0] + 1, expanded_pages_range[-1] + 1]
+
+
+def get_naming_string_from_pages_list(pages_list: list, is_range):
+    naming_string = ""
+    if is_range:
+        naming_string = format_page_range(pages_list)
+    else:
+        naming_string = f"{[page + 1 for page in pages_list]}"
+
+    return naming_string

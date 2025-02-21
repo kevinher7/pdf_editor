@@ -3,21 +3,16 @@ import argparse
 from PyPDF2 import PdfWriter
 
 
-from ..utils import format_page_range
+from ..utils import get_naming_string_from_pages_list
 from ..utils import get_pdf_pages
 from ..utils import handle_pages_range
-from ..utils import parse_pages_list
-from ..utils import parse_pages_range
+from ..utils import parse_pages_to_list
 
 
 def keep_pages(file_name, pages_to_keep: str):
     is_range = False
 
-    if "-" in pages_to_keep:
-        pages_to_keep = parse_pages_range(pages_to_keep)
-        is_range = True
-    else:  # a single number or list. 例: 1 or 1,2,3
-        pages_to_keep = parse_pages_list(pages_to_keep)
+    pages_to_keep = parse_pages_to_list(pages_to_keep)
 
     if not pages_to_keep:
         raise ValueError(
@@ -33,18 +28,15 @@ def keep_pages(file_name, pages_to_keep: str):
     for page_number in pages_to_keep:
         merger.add_page(pdf_pages[page_number])
 
-    deleted_pages_string = ""
-    if is_range:
-        deleted_pages_string = format_page_range(pages_to_keep)
-    else:
-        deleted_pages_string = f"_{[page + 1 for page in pages_to_keep]}"
+    kept_pages_string = get_naming_string_from_pages_list(
+        pages_to_keep, is_range)
 
     merger.write(
-        f"./{file_name}_k{deleted_pages_string}.pdf")
+        f"./{file_name}_k{kept_pages_string}.pdf")
     merger.close()
 
     print(
-        f"Removed pages outside range {deleted_pages_string} from {file_name}.pdf")
+        f"Removed pages outside range {kept_pages_string} from {file_name}.pdf")
 
 
 def main():
